@@ -1,16 +1,13 @@
-
-
-// Color circles based on mag
-
+// Circle color based on magnitude
 function getColor(mag) {
   switch(true) {
       case (1.0 <= mag && mag <= 2.5):
         return "#0071BC";
-      case (2.5 <= mag && mag <= 4.0):
+      case (2.5 <= mag && mag <= 5.0):
         return "#35BC00";
-      case (4.0 <= mag && mag <= 5.5):
+      case (5.0 <= mag && mag <= 6.5):
         return "#BCBC00";
-      case (5.5 <= mag && mag <= 8.0):
+      case (6.5 <= mag && mag <= 8.0):
         return "#BC3500";
       case (8.0 <= mag && mag <= 20.0):
         return "#BC0000";
@@ -20,13 +17,13 @@ function getColor(mag) {
 }
 
 
-// create popup message.
+// Create popup message that includes additional information.  Location and Time when clicked.
 function popUpMsg(feature, layer) {
     layer.bindPopup("<h3>" + feature.properties.place +
       "</h3><hr><p>" + new Date(feature.properties.time) + "</p>");
   }
   
-  // define streetmap and topographical layers.
+  // Define streetmap and topographical layers.
   let streetmap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     tileSize: 512,
@@ -52,7 +49,7 @@ function popUpMsg(feature, layer) {
     layers: [streetmap]    
   });
   streetmap.addTo(myMap); 
-  // create a variable for earthquake data
+  // Create a variable for earthquake data
   let earthquakes = new L.LayerGroup();
   
   let overlayMaps = {
@@ -64,7 +61,7 @@ function popUpMsg(feature, layer) {
   }).addTo(myMap);
   
   // Perform a get request with the json url
-  const queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
+  const queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson";
   d3.json(queryUrl).then(function (data) {
     console.log('data:', data)
     console.log(data.features[0].geometry.coordinates[2])
@@ -81,7 +78,7 @@ function popUpMsg(feature, layer) {
       pointToLayer: function (feature, latlng) {
         return new L.CircleMarker(latlng, {
           radius:feature.properties.mag*10,
-          fillOpacity: 0.75
+          fillOpacity: 0.50
         });
   
       },
